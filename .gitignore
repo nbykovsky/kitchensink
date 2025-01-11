@@ -29,5 +29,6 @@ atlassian-ide-plugin.xml
 .metadata
 .factorypath
 .nbattrs
+.class
 *.log
 build.metadata
