@@ -36,18 +36,17 @@ import jakarta.validation.ValidationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/rest/members")
 public class MemberResourceRESTService {
 
-    private final Logger log;
     private final MemberRepository repository;
     private final MemberRegistration registration;
 
-    public MemberResourceRESTService(Logger log, MemberRepository repository, MemberRegistration registration) {
-        this.log = log;
+    public MemberResourceRESTService(MemberRepository repository, MemberRegistration registration) {
         this.repository = repository;
         this.registration = registration;
     }

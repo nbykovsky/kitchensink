@@ -20,26 +20,23 @@ import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.data.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for Member registration operations.
  */
+@Slf4j
 @Service
 public class MemberRegistration {
 
-    private final Logger log;
     private final MemberRepository memberRepository;
 
     /**
      * Creates a new MemberRegistration service.
      *
-     * @param log the logger to use
      * @param memberRepository the repository for member operations
      */
-    public MemberRegistration(Logger log, MemberRepository memberRepository) {
-        this.log = log;
+    public MemberRegistration(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
@@ -51,7 +48,7 @@ public class MemberRegistration {
      */
     @Transactional
     public void register(Member member) throws Exception {
-        log.info("Registering " + member.getName());
+        log.info("Registering {}", member.getName());
         memberRepository.save(member);
     }
 }
