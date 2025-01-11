@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kitchensink</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" th:href="@{/css/screen.css}" />
+</head>
+<body>
+    <div id="container">
+        <div class="dualbrand">
+            <img th:src="@{/images/rhjb_eap_logo.png}" width="300" height="175" />
+        </div>
+        <div id="content">
+            <h1>Welcome to Spring Boot!</h1>
+            
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            
+            <form th:action="@{/members}" method="post">
+                <h2>Member Registration</h2>
+                <p>Enforces annotation-based constraints defined on the model class.</p>
+                
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone #:</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" />
+                </div>
+
+                <input type="submit" value="Register" />
+            </form>
+        </div>
+        
+        <div id="aside">
+            <p>Learn more about Spring Boot.</p>
+            <ul>
+                <li><a href="https://spring.io/projects/spring-boot">Documentation</a></li>
+                <li><a href="https://spring.io/">Product Information</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

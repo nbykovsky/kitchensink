@@ -17,57 +17,36 @@
 package org.jboss.as.quickstarts.kitchensink.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
 
 @Controller
 public class MemberController {
 
-    @Autowired
-    private MemberRegistration memberRegistration;
+    private final MemberRegistration registration;
 
-    @ModelAttribute("newMember")
-    public Member initNewMember() {
-        return new Member();
+    public MemberController(MemberRegistration registration) {
+        this.registration = registration;
     }
 
-    @PostMapping("/register")
-    public String register(@ModelAttribute("newMember") Member newMember,
-                         RedirectAttributes redirectAttributes) {
+    @GetMapping(value = {"/", "/index", "/index.html"})
+    public String index(Model model) {
+        return "index";
+    }
+
+    @PostMapping("/members")
+    public String registerMember(@ModelAttribute Member member, RedirectAttributes redirectAttributes) {
         try {
-            memberRegistration.register(newMember);
-            redirectAttributes.addFlashAttribute("message", "Registration successful");
-            redirectAttributes.addFlashAttribute("messageType", "success");
-            return "redirect:/";
+            registration.register(member);
+            redirectAttributes.addFlashAttribute("message", "Member registered successfully!");
         } catch (Exception e) {
-            String errorMessage = getRootErrorMessage(e);
-            redirectAttributes.addFlashAttribute("message", errorMessage);
-            redirectAttributes.addFlashAttribute("messageType", "error");
-            return "redirect:/";
+            redirectAttributes.addFlashAttribute("error", "Registration failed: " + e.getMessage());
         }
-    }
-
-    private String getRootErrorMessage(Exception e) {
-        // Default to general error message that registration failed.
-        String errorMessage = "Registration failed. See server log for more information";
-        if (e == null) {
-            // This shouldn't happen, but return the default messages
-            return errorMessage;
-        }
-
-        // Start with the exception and recurse to find the root cause
-        Throwable t = e;
-        while (t != null) {
-            // Get the message from the Throwable class instance
-            errorMessage = t.getLocalizedMessage();
-            t = t.getCause();
-        }
-        // This is the root cause message
-        return errorMessage;
+        return "redirect:/";
     }
 }
