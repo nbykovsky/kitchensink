@@ -4,22 +4,33 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import org.springframework.beans.factory.annotation.Value;
+import java.util.Arrays;
+import com.mongodb.ServerAddress;
 
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
+    @Value("${spring.data.mongodb.host}")
+    private String host;
+
+    @Value("${spring.data.mongodb.port}")
+    private int port;
+
+    @Value("${spring.data.mongodb.database}")
+    private String database;
+
     @Override
     protected String getDatabaseName() {
-        return "kitchensinkdb";
+        return database;
     }
 
     @Override
     public MongoClient mongoClient() {
-        ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/kitchensinkdb");
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-            .applyConnectionString(connectionString)
+            .applyToClusterSettings(builder ->
+                builder.hosts(Arrays.asList(new ServerAddress(host, port))))
             .build();
         return MongoClients.create(mongoClientSettings);
     }
