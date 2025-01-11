@@ -1,6 +1,7 @@
 *~
 build
 target
+target/
 .DS_Store
 bin
 .openshift
