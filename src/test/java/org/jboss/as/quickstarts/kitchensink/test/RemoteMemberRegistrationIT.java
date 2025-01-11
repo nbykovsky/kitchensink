@@ -38,7 +38,7 @@ public class RemoteMemberRegistrationIT {
     protected URI getHTTPEndpoint() {
         String host = getServerHost();
         if (host == null) {
-            host = "http://localhost:8080/kitchensink";
+            host = "http://localhost:8080";
         }
         try {
             return new URI(host + "/rest/members");

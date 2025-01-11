@@ -18,7 +18,7 @@ package org.jboss.as.quickstarts.kitchensink.test;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 import jakarta.inject.Inject;
 
@@ -28,15 +28,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MemberRegistrationIT {
     @Inject
     MemberRegistration memberRegistration;
-
-    @Inject
-    Logger log;
 
     @Test
     public void testRegister() throws Exception {
