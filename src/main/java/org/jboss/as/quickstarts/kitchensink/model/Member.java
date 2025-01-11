@@ -18,12 +18,8 @@ package org.jboss.as.quickstarts.kitchensink.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.Email;
@@ -33,16 +29,14 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Digits;
 
-@Entity
-@Table(name = "member")
+@Document(collection = "members")
 @Validated
 public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotNull
     @Size(min = 1, max = 25)
@@ -52,20 +46,18 @@ public class Member implements Serializable {
     @NotNull
     @NotEmpty
     @Email
-    @Column(unique = true)
     private String email;
 
     @NotNull
     @Size(min = 10, max = 12)
     @Digits(fraction = 0, integer = 12)
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

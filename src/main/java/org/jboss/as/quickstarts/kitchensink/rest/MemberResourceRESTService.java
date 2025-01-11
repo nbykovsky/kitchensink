@@ -16,7 +16,7 @@
  */
 package org.jboss.as.quickstarts.kitchensink.rest;
 
-import org.jboss.as.quickstarts.kitchensink.data.MemberRepository;
+import org.jboss.as.quickstarts.kitchensink.repository.MemberRepository;
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
 import org.springframework.http.HttpStatus;
@@ -57,8 +57,8 @@ public class MemberResourceRESTService {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> lookupMemberById(@PathVariable("id") long id) {
-        Member member = repository.findById(id);
+    public ResponseEntity<Member> lookupMemberById(@PathVariable("id") String id) {
+        Member member = repository.findById(id).orElse(null);
         if (member == null) {
             return ResponseEntity.notFound().build();
         }

@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
+import org.jboss.as.quickstarts.kitchensink.repository.MemberRepository;
 
 @Component
 @RequestScope

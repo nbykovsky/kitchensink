@@ -17,7 +17,7 @@
 package org.jboss.as.quickstarts.kitchensink.service;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
-import org.jboss.as.quickstarts.kitchensink.data.MemberRepository;
+import org.jboss.as.quickstarts.kitchensink.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
