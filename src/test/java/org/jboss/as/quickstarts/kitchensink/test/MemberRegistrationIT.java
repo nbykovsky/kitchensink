@@ -16,7 +16,6 @@
  */
 package org.jboss.as.quickstarts.kitchensink.test;
 
-import static org.junit.Assert.assertNotNull;
 
 // import java.util.logging.Logger;
 
@@ -24,14 +23,12 @@ import jakarta.inject.Inject;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class MemberRegistrationIT {
     @Inject
@@ -44,7 +41,7 @@ public class MemberRegistrationIT {
         newMember.setEmail("jane" + System.currentTimeMillis() + "@mailinator.com");
         newMember.setPhoneNumber("2125551234");
         memberRegistration.register(newMember);
-        assertNotNull(newMember.getId());
+        Assertions.assertNotNull(newMember.getId());
         log.info(newMember.getName() + " was persisted with id " + newMember.getId());
     }
 
