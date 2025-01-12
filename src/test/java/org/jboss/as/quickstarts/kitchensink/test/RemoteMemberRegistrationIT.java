@@ -63,13 +63,13 @@ public class RemoteMemberRegistrationIT {
         newMember.setPhoneNumber("2125551234");
         JsonObject json = Json.createObjectBuilder()
                 .add("name", "Jane Doe")
-                .add("email", "jane@mailinator.com")
+                .add("email", "jane" + System.currentTimeMillis() + "@mailinator.com")
                 .add("phoneNumber", "2125551234").build();
         HttpRequest request = HttpRequest.newBuilder(getHTTPEndpoint())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json.toString()))
                 .build();
-        HttpResponse response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         Assert.assertEquals(200, response.statusCode());
         Assert.assertEquals("", response.body().toString() );
     }

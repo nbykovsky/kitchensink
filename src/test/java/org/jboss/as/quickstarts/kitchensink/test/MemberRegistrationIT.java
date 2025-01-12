@@ -41,7 +41,7 @@ public class MemberRegistrationIT {
     public void testRegister() throws Exception {
         Member newMember = new Member();
         newMember.setName("Jane Doe");
-        newMember.setEmail("jane@mailinator.com");
+        newMember.setEmail("jane" + System.currentTimeMillis() + "@mailinator.com");
         newMember.setPhoneNumber("2125551234");
         memberRegistration.register(newMember);
         assertNotNull(newMember.getId());
