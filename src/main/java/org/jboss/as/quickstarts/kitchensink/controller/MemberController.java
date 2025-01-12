@@ -16,69 +16,37 @@
  */
 package org.jboss.as.quickstarts.kitchensink.controller;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.inject.Model;
-import jakarta.enterprise.inject.Produces;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
 
-// The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
-// EL name
-// Read more about the @Model stereotype in this FAQ:
-// http://www.cdi-spec.org/faq/#accordion6
-@Model
+@Controller
 public class MemberController {
 
-    @Inject
-    private FacesContext facesContext;
+    private final MemberRegistration registration;
 
-    @Inject
-    private MemberRegistration memberRegistration;
-
-    @Produces
-    @Named
-    private Member newMember;
-
-    @PostConstruct
-    public void initNewMember() {
-        newMember = new Member();
+    public MemberController(MemberRegistration registration) {
+        this.registration = registration;
     }
 
-    public void register() throws Exception {
+    @GetMapping(value = {"/", "/index", "/index.html"})
+    public String index(Model model) {
+        return "index";
+    }
+
+    @PostMapping("/members")
+    public String registerMember(@ModelAttribute Member member, RedirectAttributes redirectAttributes) {
         try {
-            memberRegistration.register(newMember);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful");
-            facesContext.addMessage(null, m);
-            initNewMember();
+            registration.register(member);
+            redirectAttributes.addFlashAttribute("message", "Member registered successfully!");
         } catch (Exception e) {
-            String errorMessage = getRootErrorMessage(e);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
-            facesContext.addMessage(null, m);
+            redirectAttributes.addFlashAttribute("error", "Registration failed: " + e.getMessage());
         }
+        return "redirect:/";
     }
-
-    private String getRootErrorMessage(Exception e) {
-        // Default to general error message that registration failed.
-        String errorMessage = "Registration failed. See server log for more information";
-        if (e == null) {
-            // This shouldn't happen, but return the default messages
-            return errorMessage;
-        }
-
-        // Start with the exception and recurse to find the root cause
-        Throwable t = e;
-        while (t != null) {
-            // Get the message from the Throwable class instance
-            errorMessage = t.getLocalizedMessage();
-            t = t.getCause();
-        }
-        // This is the root cause message
-        return errorMessage;
-    }
-
 }

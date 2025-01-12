@@ -28,8 +28,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class RemoteMemberRegistrationIT {
 
@@ -38,7 +38,7 @@ public class RemoteMemberRegistrationIT {
     protected URI getHTTPEndpoint() {
         String host = getServerHost();
         if (host == null) {
-            host = "http://localhost:8080/kitchensink";
+            host = "http://localhost:8080";
         }
         try {
             return new URI(host + "/rest/members");
@@ -63,15 +63,15 @@ public class RemoteMemberRegistrationIT {
         newMember.setPhoneNumber("2125551234");
         JsonObject json = Json.createObjectBuilder()
                 .add("name", "Jane Doe")
-                .add("email", "jane@mailinator.com")
+                .add("email", "jane" + System.currentTimeMillis() + "@mailinator.com")
                 .add("phoneNumber", "2125551234").build();
         HttpRequest request = HttpRequest.newBuilder(getHTTPEndpoint())
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json.toString()))
                 .build();
-        HttpResponse response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        Assert.assertEquals(200, response.statusCode());
-        Assert.assertEquals("", response.body().toString() );
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("", response.body().toString());
     }
 
 }

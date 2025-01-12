@@ -1,6 +1,7 @@
 *~
 build
 target
+target/
 .DS_Store
 bin
 .openshift
@@ -28,5 +29,6 @@ atlassian-ide-plugin.xml
 .metadata
 .factorypath
 .nbattrs
+.class
 *.log
 build.metadata
