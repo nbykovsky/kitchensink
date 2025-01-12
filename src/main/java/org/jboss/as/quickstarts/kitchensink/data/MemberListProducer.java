@@ -19,7 +19,7 @@ package org.jboss.as.quickstarts.kitchensink.data;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
