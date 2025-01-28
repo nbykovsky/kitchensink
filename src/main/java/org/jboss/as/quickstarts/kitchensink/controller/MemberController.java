@@ -24,23 +24,36 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
+import org.jboss.as.quickstarts.kitchensink.repository.MemberRepository;
+import org.springframework.validation.BindingResult;
+import jakarta.validation.Valid;
 
 @Controller
 public class MemberController {
 
     private final MemberRegistration registration;
+    private final MemberRepository memberRepository;
 
-    public MemberController(MemberRegistration registration) {
+    public MemberController(MemberRegistration registration, MemberRepository memberRepository) {
         this.registration = registration;
+        this.memberRepository = memberRepository;
     }
 
     @GetMapping(value = {"/", "/index", "/index.html"})
     public String index(Model model) {
+        model.addAttribute("members", memberRepository.findAllOrderedByName());
+        model.addAttribute("member", new Member());
         return "index";
     }
 
     @PostMapping("/members")
-    public String registerMember(@ModelAttribute Member member, RedirectAttributes redirectAttributes) {
+    public String registerMember(@Valid @ModelAttribute Member member, 
+                               BindingResult result,
+                               RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            return "index";
+        }
+        
         try {
             registration.register(member);
             redirectAttributes.addFlashAttribute("message", "Member registered successfully!");
