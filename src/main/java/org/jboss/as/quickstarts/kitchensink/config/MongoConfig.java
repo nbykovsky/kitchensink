@@ -8,8 +8,10 @@ import com.mongodb.MongoClientSettings;
 import org.springframework.beans.factory.annotation.Value;
 import java.util.Arrays;
 import com.mongodb.ServerAddress;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 @Configuration
+@EnableMongoAuditing
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${spring.data.mongodb.host}")

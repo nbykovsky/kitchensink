@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.Email;
@@ -43,9 +44,10 @@ public class Member implements Serializable {
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String name;
 
+    @Email
     @NotNull
     @NotEmpty
-    @Email
+    @Indexed(unique = true, background = false)
     private String email;
 
     @NotNull

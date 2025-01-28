@@ -21,6 +21,7 @@ import org.jboss.as.quickstarts.kitchensink.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 
 /**
  * Service for Member registration operations.
@@ -49,6 +50,10 @@ public class MemberRegistration {
     @Transactional
     public void register(Member member) throws Exception {
         log.info("Registering {}", member.getName());
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        } catch (DuplicateKeyException e) {
+            throw e; // Re-throw to be handled by controller
+        }
     }
 }

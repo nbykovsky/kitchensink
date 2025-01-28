@@ -27,6 +27,7 @@ import org.jboss.as.quickstarts.kitchensink.service.MemberRegistration;
 import org.jboss.as.quickstarts.kitchensink.repository.MemberRepository;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
+import org.springframework.dao.DuplicateKeyException;
 
 @Controller
 public class MemberController {
@@ -46,20 +47,26 @@ public class MemberController {
         return "index";
     }
 
-    @PostMapping("/members")
-    public String registerMember(@Valid @ModelAttribute Member member, 
-                               BindingResult result,
-                               RedirectAttributes redirectAttributes) {
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("member") Member member, 
+                          BindingResult result, 
+                          Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("members", memberRepository.findAllOrderedByName());
             return "index";
         }
         
         try {
             registration.register(member);
-            redirectAttributes.addFlashAttribute("message", "Member registered successfully!");
+            return "redirect:/";
+        } catch (DuplicateKeyException e) {
+            result.rejectValue("email", "duplicate", "This email is already registered");
+            model.addAttribute("members", memberRepository.findAllOrderedByName());
+            return "index";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Registration failed: " + e.getMessage());
+            result.rejectValue("email", "error", "An error occurred during registration");
+            model.addAttribute("members", memberRepository.findAllOrderedByName());
+            return "index";
         }
-        return "redirect:/";
     }
 }
