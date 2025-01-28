@@ -18,16 +18,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.jboss.eap.quickstarts</groupId>
-        <artifactId>jboss-eap-quickstart-parent</artifactId>
-        <!--
-        Maintain separation between the artifact id and the version to help prevent
-        merge conflicts between commits changing the GA and those changing the V.
-        -->
-        <version>6.0.0.redhat-00001</version>
-        <relativePath/>
-    </parent>
+    
+    <groupId>org.jboss.eap.quickstarts</groupId>
     <artifactId>kitchensink</artifactId>
     <version>8.0.0.GA</version>
     <packaging>war</packaging>
@@ -43,83 +35,14 @@
     </licenses>
 
     <properties>
-        <!-- The versions for BOMs, Dependencies and Plugins -->
-        <version.server.bom>8.0.0.GA-redhat-00009</version.server.bom>
-        <version.eap.maven.plugin>1.0.0.Final-redhat-00014</version.eap.maven.plugin>
-        <!-- Add Spring Boot version and Java version -->
         <spring-boot.version>3.2.3</spring-boot.version>
         <java.version>21</java.version>
         <lombok.version>1.18.30</lombok.version>
+        <parsson.version>1.1.5</parsson.version>
     </properties>
-
-    <repositories>
-        <!-- keep this repository the first -->
-        <repository>
-            <id>jboss-public-maven-repository</id>
-            <name>JBoss Public Maven Repository</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>redhat-ga-maven-repository</id>
-            <name>Red Hat GA Maven Repository</name>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <layout>default</layout>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <!-- keep this repository the first -->
-        <pluginRepository>
-            <id>jboss-public-maven-repository</id>
-            <name>JBoss Public Maven Repository</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>redhat-ga-maven-repository</id>
-            <name>Red Hat GA Maven Repository</name>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
-            <!-- importing the ee-with-tools BOM adds specs and other useful artifacts as managed dependencies -->
-            <dependency>
-                <groupId>org.jboss.bom</groupId>
-                <artifactId>jboss-eap-ee-with-tools</artifactId>
-                <version>${version.server.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- Add Spring Boot BOM -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -192,7 +115,7 @@
         <dependency>
             <groupId>org.eclipse.parsson</groupId>
             <artifactId>parsson</artifactId>
-            <scope>test</scope>
+            <version>${parsson.version}</version>
         </dependency>
 
         <!-- Add this dependency -->
@@ -202,90 +125,6 @@
             <version>2.0.1</version>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <!-- An optional Arquillian testing profile that executes tests in a remote JBoss EAP instance.
-            Run with: mvn clean verify -Parq-remote -->
-            <id>arq-remote</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>${version.failsafe.plugin}</version>
-                        <configuration>
-                            <includes>
-                                <include>**/RemoteMemberRegistrationIT</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/MemberRegistrationIT</exclude>
-                            </excludes>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>openshift</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jboss.eap.plugins</groupId>
-                        <artifactId>eap-maven-plugin</artifactId>
-                        <version>${version.eap.maven.plugin}</version>
-                        <configuration>
-                            <channels>
-                                <channel>
-                                    <manifest>
-                                        <groupId>org.jboss.eap.channels</groupId>
-                                        <artifactId>eap-8.0</artifactId>
-                                    </manifest>
-                                </channel>
-                            </channels>
-                            <feature-packs>
-                                <feature-pack>
-                                    <location>org.jboss.eap:wildfly-ee-galleon-pack</location>
-                                </feature-pack>
-                                <feature-pack>
-                                    <location>org.jboss.eap.cloud:eap-cloud-galleon-pack</location>
-                                </feature-pack>
-                            </feature-packs>
-                            <layers>
-                                <layer>cloud-server</layer>
-                                <layer>h2-driver</layer>
-                                <layer>ejb</layer>
-                                <layer>jsf</layer>
-                            </layers>
-                            <filename>ROOT.war</filename>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>package</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <build>
         <plugins>
@@ -299,6 +138,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -307,29 +148,6 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <includes>
-                        <include>**/*IT.java</include>
-                        <include>**/*ITCase.java</include>
-                        <include>**/Remote*IT.java</include>
-                    </includes>
-                    <systemPropertyVariables>
-                        <server.host>http://localhost:8080</server.host>
-                    </systemPropertyVariables>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
