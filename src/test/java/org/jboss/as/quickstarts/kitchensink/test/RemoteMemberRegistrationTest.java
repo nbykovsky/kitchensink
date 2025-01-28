@@ -31,9 +31,9 @@ import org.jboss.as.quickstarts.kitchensink.model.Member;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-public class RemoteMemberRegistrationIT {
+public class RemoteMemberRegistrationTest {
 
-    private static final Logger log = Logger.getLogger(RemoteMemberRegistrationIT.class.getName());
+    private static final Logger log = Logger.getLogger(RemoteMemberRegistrationTest.class.getName());
 
     protected URI getHTTPEndpoint() {
         String host = getServerHost();

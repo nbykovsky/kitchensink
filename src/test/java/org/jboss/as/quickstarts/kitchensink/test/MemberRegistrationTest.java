@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest
-public class MemberRegistrationIT {
+public class MemberRegistrationTest {
     @Inject
     MemberRegistration memberRegistration;
 
