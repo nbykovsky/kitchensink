@@ -50,7 +50,8 @@ public class MemberController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("member") Member member, 
                           BindingResult result, 
-                          Model model) {
+                          Model model,
+                          RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("members", memberRepository.findAllOrderedByName());
             return "index";
@@ -58,6 +59,7 @@ public class MemberController {
         
         try {
             registration.register(member);
+            redirectAttributes.addFlashAttribute("message", "Member " + member.getName() + " was successfully registered!");
             return "redirect:/";
         } catch (DuplicateKeyException e) {
             result.rejectValue("email", "duplicate", "This email is already registered");
