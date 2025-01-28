@@ -106,22 +106,43 @@ body {
     width: 375px;
     border: 1px solid #D5D5D5;
   }
+  .field-row {
+    clear: both;
+    padding: 3px 0;
+  }
   label {
     float: left;
-    width: 15%;
+    width: 25%;
     margin-left: 20px;
     margin-right: 0.5em;
     padding-top: 0.2em;
     text-align: right;
     font-weight: bold;
-    color:#363636;
+    color: #363636;
   }
   input {
     margin-bottom: 8px;
   }
+  input[type="text"],
+  input[type="email"] {
+    width: 45%;
+  }
   .register {
     float: left;
     margin-left: 85px;
+  }
+  .buttons {
+    clear: both;
+    padding-top: 10px;
+  }
+  
+  /* Remove the grid-based styles */
+  .form-grid,
+  .form-row,
+  .titleCell,
+  .form-control,
+  .text-danger {
+      display: none;
   }
   
   /*  -----  table style  -------  */
